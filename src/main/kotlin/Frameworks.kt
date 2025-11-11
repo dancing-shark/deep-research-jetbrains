@@ -1,5 +1,6 @@
 package com.example
 
+import ai.koog.agents.ext.agent.chatAgentStrategy
 import ai.koog.ktor.Koog
 import ai.koog.ktor.aiAgent
 import ai.koog.prompt.executor.clients.openai.OpenAIModels
@@ -16,20 +17,33 @@ import org.koin.logger.slf4jLogger
 fun Application.configureFrameworks() {
     install(Koog) {
         llm {
-            openAI(apiKey = "your-openai-api-key")
-            anthropic(apiKey = "your-anthropic-api-key")
-            ollama { baseUrl = "http://localhost:11434" }
-            google(apiKey = "your-google-api-key")
-            openRouter(apiKey = "your-openrouter-api-key")
-            deepSeek(apiKey = "your-deepseek-api-key")
+            openAI(apiKey = environment.config.property("koog.openai.apikey").getString())
+        }
+
+        agentConfig {
+            prompt("deep-research-agent") {
+                system("""
+                    You are a research assistant.
+                    If not other requested always do does steps:
+                    1. 
+                """.trimIndent())
+            }
+            maxAgentIterations = 30
         }
     }
+
     
     routing {
         route("/ai") {
             post("/chat") {
                 val userInput = call.receive<String>()
-                val output = aiAgent(userInput, model = OpenAIModels.Chat.GPT4_1)
+                val output = aiAgent<String, String>(
+                    strategy = chatAgentStrategy(),
+                    model = OpenAIModels.Chat.GPT4_1,
+                    input = userInput,
+                )
+
+
                 call.respondText(output)
             }
         }
