@@ -11,9 +11,9 @@ class BaseAgentToolBuilder (
     fun build(): Tool<AIAgentTool.AgentToolArgs, AIAgentTool.AgentToolResult> {
         val service = agent.build()
         return service.createAgentTool(
-            agentName = agent.getAgentName(),
-            agentDescription = agent.getAgentDescription(),
-            inputDescription = agent.getInputDescription()
+            agentName = agent.agentName,
+            agentDescription = agent.agentDescription,
+            inputDescription = agent.inputDescription
         )
     }
 }

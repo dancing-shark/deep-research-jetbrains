@@ -1,15 +1,15 @@
 package com.example.agents
 
 import ai.koog.agents.core.agent.GraphAIAgentService
+import ai.koog.agents.core.tools.ToolRegistry
 
-interface BaseAgent {
-    val agentName: String
-    val agentDescription: String
-    val inputDescription: String
+abstract class BaseAgent(
+    protected val cfg: BaseAgentConfig,
+    protected val toolRegistry: ToolRegistry,
+) {
+    abstract val agentName: String   // public read-only
+    abstract val agentDescription: String
+    abstract val inputDescription: String
 
-    fun build(): GraphAIAgentService<String, String>
-
-    fun getAgentName(): String
-    fun getAgentDescription(): String
-    fun getInputDescription(): String
+    abstract fun build(): GraphAIAgentService<String, String>
 }

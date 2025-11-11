@@ -1,3 +1,4 @@
+// BrainstormingAgent.kt
 package com.example.agents
 
 import ai.koog.agents.core.agent.AIAgentService
@@ -10,9 +11,10 @@ import ai.koog.prompt.executor.clients.openai.OpenAIModels
 import ai.koog.prompt.executor.llms.all.simpleOpenAIExecutor
 
 class BrainstormingAgent(
-    private val cfg: BaseAgentConfig,
-    private val toolRegistry: ToolRegistry
-): BaseAgent {
+    cfg: BaseAgentConfig,
+    toolRegistry: ToolRegistry
+) : BaseAgent(cfg, toolRegistry) {
+
     override val agentName = "BrainstormingAgent"
     override val agentDescription = "A brainstorming agent to generate research keywords."
     override val inputDescription = "Research topic for keyword brainstorming."
@@ -22,11 +24,12 @@ class BrainstormingAgent(
             promptExecutor = simpleOpenAIExecutor(cfg.openAiApiKey),
             llmModel = OpenAIModels.Chat.GPT5,
             systemPrompt =
-            """You are a $agentName specialist.
-                    | Take each Keyword, search, create research library item, make keyword as done, optional create or update notes, optional create new keywords.
-                    | Do it until all keywords are done.
-                    | Keep the research topic in mind.
-                    |""".trimMargin(),
+                """
+                You are a $agentName specialist.
+                Take each Keyword, search, create research library item, make keyword as done, optional create or update notes, optional create new keywords.
+                Do it until all keywords are done.
+                Keep the research topic in mind.
+                """.trimIndent(),
             toolRegistry = toolRegistry
         ) {
             install(OpenTelemetry) {
@@ -36,20 +39,9 @@ class BrainstormingAgent(
                     langfuseSecretKey = cfg.lfSecret,
                     traceAttributes = listOf(
                         CustomAttribute("langfuse.trace.tags", listOf(agentName))
-                    ))
+                    )
+                )
                 setVerbose(true)
             }
         }
-
-    override fun getAgentName(): String {
-        return agentName
-    }
-
-    override fun getAgentDescription(): String {
-        return agentDescription
-    }
-
-    override fun getInputDescription(): String {
-        return inputDescription
-    }
 }
