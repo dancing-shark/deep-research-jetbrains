@@ -1,0 +1,9 @@
+### GET request to example server
+GET localhost:8080
+
+
+### POST request to AI chat endpoint
+# @timeout 10 m
+POST localhost:8080/ai/chat
+
+Can you brainstorm about LLM and search in the web the keywords and give me some Sources?
