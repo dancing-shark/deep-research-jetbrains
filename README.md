@@ -1,5 +1,8 @@
 # deep-research-jetbrains
 
+<img width="1127" height="502" alt="image" src="https://github.com/user-attachments/assets/8ed8b1d4-4664-42dc-a213-829a05a79e9d" />
+
+
 This project was created using the [Ktor Project Generator](https://start.ktor.io).
 
 Here are some useful links to get you started:
